@@ -14,9 +14,16 @@ Released under the MIT License
     saeki = undefined
     container = undefined
     loaded = false
+    mouseX = 0
+    mouseY = 0
+    izuizu = undefined
+    firstPointX = []
+    firstPointY = []
+
 
     loadManifest = [
       {id: 'saeki', src: './images/saeki.png'}
+      {id: 'izuizu', src: './images/イズイズ.jpg'}
       {id: 'magic_stone', src: './images/魔法石.png'}
     ]
     loader = new createjs.LoadQueue(true)
@@ -31,6 +38,8 @@ Released under the MIT License
     loader.loadManifest loadManifest
 
     tick = () ->
+      mover([izuizu])
+
       stage.update()
 
     resize = ->
@@ -47,6 +56,9 @@ Released under the MIT License
 
       saeki.x = event.stageX
       saeki.y = event.stageY
+
+      mouseX = event.stageX
+      mouseY = event.stageY
 
       return
 
@@ -133,6 +145,23 @@ Released under the MIT License
         , 1500, createjs.Ease.backOut)
       .call(complete)
 
+      # イズイズ
+      izuizu = new createjs.Bitmap(loader.getResult 'izuizu')
+      izuizu.regX = izuizu.image.width / 2
+      izuizu.regY = izuizu.image.height / 2
+      izuizu.x = canvas.width() / 2
+      izuizu.y = canvas.height() / 2
+      izuizu.scaleX = 0.25
+      izuizu.scaleY = 0.25
+      izuizu.visible = false
+      stage.addChild(izuizu)
+
+      # offsetの保存
+      _([izuizu]).forEach (object, index) ->
+        firstPointX[index] = object.x
+        firstPointY[index] = object.y
+        return true
+
       # パーティクル
       container = new createjs.Container()
       stage.addChild container
@@ -147,6 +176,18 @@ Released under the MIT License
 #      console.log 'complete'
 
       loaded = true
+      izuizu.visible = true
+
+    mover = (selector) ->
+      _(selector).forEach (object, index) ->
+        theta = Math.atan2(object.y - mouseY, object.x - mouseX)
+        d = 5000 / Math.sqrt(Math.pow(mouseX - object.x, 2) + Math.pow(mouseY - object.y, 2))
+        left = object.x + d * Math.cos(theta) + (firstPointX[index] - object.x) * 0.1
+        top = object.y + d * Math.sin(theta) + (firstPointY[index] - object.y) * 0.1
+        object.x = left
+        object.y = top
+
+        return true
 
     resize()
 )()
