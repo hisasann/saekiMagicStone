@@ -1,0 +1,27 @@
+{
+  "name": "saekiMagicStone",
+  "version": "0.0.0",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "modernizr": "~2.8.2",
+    "easeljs": "*",
+    "TweenJS": "*",
+    "PreloadJS": "*",
+    "pixi": "~1.5.3",
+    "lodash": "~2.4.1"
+  }
+}
